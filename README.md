@@ -7,9 +7,41 @@
 
 ## Overview
 
-ruleengine is a web interface over [ruleengine-core](https://github.com/niharrathod/ruleengine-core). It provides management layer for RuleEngine, which include following :
+ruleengine is a web interface over [ruleengine-core](https://github.com/niharrathod/ruleengine-core). It provides management layer for RuleEngine, which include following operations :
 
-- [ ] CRUD RuleEngine APIs
-- [ ] RuleEngine evaluate API
-- [ ] Enable/Disable RuleEngine
+- CRUD RuleEngine APIs
+- RuleEngine evaluate API
+- Enable/Disable RuleEngine
+- RuleEngine versioning
+
+### Todo
+
+- [X] YML Configuration file
+- [X] [gin](https://github.com/gin-gonic/gin) based web server
+- [X] [Zap](https://pkg.go.dev/go.uber.org/zap) based logger
+- [X] docker image build
+- [ ] mongodb client setup
+- [ ] request tracing
+- [ ] RuleEngine CRUD API
+- [ ] RuleEngine Enable/Disable API
 - [ ] RuleEngine versioning
+
+#### Commands
+
+##### build executable
+
+```bash
+    $ env GOOS=linux GOARCH=amd64 go build -o ruleengine .         # for linux
+```
+
+##### Start server
+
+```bash
+    $ ruleengine -config=config.yml
+```
+
+##### To build docker image
+
+```bash
+    $ docker image build --no-cache --rm -t <appName>:<tag> .
+```
