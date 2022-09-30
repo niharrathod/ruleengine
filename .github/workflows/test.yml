@@ -1,0 +1,29 @@
+name: Test
+
+on:
+  push:
+    branches: [ "master" , "release/*" ]
+  pull_request:
+    branches: [ "master" , "release/*"]
+
+jobs:
+
+  test:
+    strategy:
+      matrix:
+        go-version: [1.19]
+        platform: [ubuntu-latest]
+    runs-on: ${{ matrix.platform }}
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: ${{ matrix.go-version }}
+    
+    # - name: download dependencies
+    #   run: go mod download
+      
+    - name: Test
+      run: go test -v ./...
