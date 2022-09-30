@@ -1,11 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"github.com/niharrathod/ruleengine/app"
+)
 
 func main() {
-	hello()
-}
-
-func hello() {
-	fmt.Println("hello world!")
+	app := app.New()
+	app.Run()
 }
