@@ -3,6 +3,7 @@ package app
 import (
 	"context"
 	"errors"
+	"fmt"
 	"net/http"
 	"os"
 	"os/signal"
@@ -87,5 +88,10 @@ func (app *appServer) shutdown(ctx context.Context) {
 	if err := app.httpserver.Shutdown(ctx); err != nil {
 		log.Logger.Error("Server Shutdown failed:", zap.String("error", err.Error()))
 	}
-	log.Logger.Sync()
+
+	err := log.Logger.Sync()
+	if err != nil {
+		// logger sync failed, so back to basics :(
+		fmt.Println(err.Error())
+	}
 }
