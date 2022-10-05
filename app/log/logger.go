@@ -1,7 +1,7 @@
 package log
 
 import (
-	"github.com/niharrathod/ruleengine/app/internal/config"
+	"github.com/niharrathod/ruleengine/app/config"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )

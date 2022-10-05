@@ -1,5 +1,11 @@
-server:
-  http:
-    bindIp: "127.0.0.1"
-    bindPort: 8080
-    contextPath: ""
+App:
+  server:
+    http:
+      bindIp: "127.0.0.1"
+      bindPort: 8080
+      contextPath: ""
+  datastore:
+    mongo:
+      url: "mongodb://localhost:27017"
+      username: "mongoadmin"
+      password: "secret"

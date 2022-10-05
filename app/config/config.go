@@ -28,10 +28,26 @@ type ServerConf struct {
 }
 
 type AppConf struct {
-	Server *ServerConf `yaml:"server"`
+	Server    *ServerConf    `yaml:"server"`
+	Datastore *DatastoreConf `yaml:"datastore"`
+}
+
+type DatastoreConf struct {
+	Mongo *MongoConf `yaml:"mongo"`
+}
+
+type MongoConf struct {
+	Url      string `yaml:"url"`
+	Username string `yaml:"username"`
+	Password string `yaml:"password"`
+}
+
+type Config struct {
+	App *AppConf `yaml:"App"`
 }
 
 var Server *ServerConf
+var Datastore *DatastoreConf
 
 // application mode either 'release' or 'dev'
 var EnvironmentMode string = DevelopmentMode
@@ -58,7 +74,7 @@ func Initialize() {
 	ymlPath := flag.String("config", "config.yml", "yaml based configuration path")
 	flag.Parse()
 
-	var appConf AppConf
+	var conf Config
 
 	// check if file exist
 	if _, err := os.Stat(*ymlPath); errors.Is(err, os.ErrNotExist) {
@@ -72,13 +88,14 @@ func Initialize() {
 		log.Fatalf("Could not read config file. error: %v", err)
 	}
 
-	err = yaml.Unmarshal(ymlConfig, &appConf)
+	err = yaml.Unmarshal(ymlConfig, &conf)
 	if err != nil {
 		log.Fatalf("Could not unmarshal config file. error: %v", err)
 	}
 
-	prepareFinalConfig(&appConf)
-	Server = appConf.Server
+	prepareFinalConfig(conf.App)
+	Server = conf.App.Server
+	Datastore = conf.App.Datastore
 }
 
 func prepareFinalConfig(appConfig *AppConf) {
