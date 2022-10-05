@@ -12,9 +12,10 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/niharrathod/ruleengine/app/config"
+	"github.com/niharrathod/ruleengine/app/ext/datastore"
 	"github.com/niharrathod/ruleengine/app/handler"
-	"github.com/niharrathod/ruleengine/app/internal/config"
-	"github.com/niharrathod/ruleengine/app/internal/log"
+	"github.com/niharrathod/ruleengine/app/log"
 	"go.uber.org/zap"
 
 	ginzap "github.com/gin-contrib/zap"
@@ -34,6 +35,7 @@ func (app *appServer) init() {
 	config.Initialize()
 	log.Initialize()
 	// add initiation activities here
+	datastore.Initialize()
 }
 
 func (app *appServer) Run() {
@@ -84,6 +86,7 @@ func (app *appServer) prepAndWaitForShutDown() {
 func (app *appServer) shutdown(ctx context.Context) {
 
 	// add context aware shutdown activities here
+	datastore.Close(ctx)
 
 	if err := app.httpserver.Shutdown(ctx); err != nil {
 		log.Logger.Error("Server Shutdown failed:", zap.String("error", err.Error()))
