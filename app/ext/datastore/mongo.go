@@ -3,7 +3,7 @@ package datastore
 import (
 	"context"
 	"errors"
-	"fmt"
+	"os"
 	"time"
 
 	"github.com/niharrathod/ruleengine/app/config"
@@ -49,6 +49,7 @@ func Initialize() {
 	mongoClient, err := mongo.Connect(context.TODO(), options...)
 	if err != nil {
 		log.Logger.Error("Client connect failed. error: %v", zap.String("error", err.Error()))
+		os.Exit(1)
 	}
 
 	client = mongoClient
@@ -57,25 +58,26 @@ func Initialize() {
 	defer cancel()
 	if err := client.Ping(pingCtx, readpref.Primary()); err != nil {
 		log.Logger.Error("Client ping failed. error: %v", zap.String("error", err.Error()))
+		os.Exit(1)
 	}
 
 	ruleEngineCollection = client.Database(database).Collection(collection)
 
 	// index creation for text search
 	model := mongo.IndexModel{Keys: bson.D{{Key: name, Value: "text"}}}
-	name, err := ruleEngineCollection.Indexes().CreateOne(context.TODO(), model)
+	_, err = ruleEngineCollection.Indexes().CreateOne(context.TODO(), model)
 	if err != nil {
 		log.Logger.Error("Index create failed error: %v", zap.String("error", err.Error()))
+		os.Exit(1)
 	}
-	fmt.Println("Index Created by name: " + name)
 
 	// rule engine name and tag index
 	model = mongo.IndexModel{Keys: bson.D{{Key: name, Value: 1}, {Key: tag, Value: 2}}}
-	name, err = ruleEngineCollection.Indexes().CreateOne(context.TODO(), model)
+	_, err = ruleEngineCollection.Indexes().CreateOne(context.TODO(), model)
 	if err != nil {
 		log.Logger.Error("Index create failed error: %v", zap.String("error", err.Error()))
+		os.Exit(1)
 	}
-	fmt.Println("Index Created by name: " + name)
 }
 
 func Close(ctx context.Context) error {
