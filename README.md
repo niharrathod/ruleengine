@@ -20,29 +20,26 @@ ruleengine is a web interface over [ruleengine-core](https://github.com/niharrat
 - [X] docker image build
 - [X] mongodb client setup
 - [ ] request tracing
-**Control plane API**
+
+##### Control plane API
+
 - [X] RuleEngine CRD API
 - [X] RuleEngine Update (Default/Enable/Disable) API
 - [X] RuleEngine versioning
-**Data plane API**
+
+##### Data plane API
+
 - [ ] RuleEngine evaluate
 
-#### Commands
-
-##### build executable
+### Commands
 
 ```bash
-    $ env GOOS=linux GOARCH=amd64 go build -o ruleengine .         # for linux
-```
+# Build executable
+env GOOS=linux GOARCH=amd64 go build -o ruleengine .         # linux
 
-##### Start server
+# Start server
+ruleengine -config=config.yml
 
-```bash
-    $ ruleengine -config=config.yml
-```
-
-##### To build docker image
-
-```bash
-    $ docker image build --no-cache --rm -t <appName>:<tag> .
+# Build docker image
+docker image build --no-cache --rm -t <appName>:<tag> .
 ```
