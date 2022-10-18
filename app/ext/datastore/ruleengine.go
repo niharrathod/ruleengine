@@ -313,7 +313,7 @@ func DisableTag(ctx context.Context, ruleEngineName string, tag string) *entitie
 		}
 
 		if existingEngine.DefaultTag == tag {
-			return nil, entities.NewError(entities.ErrCodeDatastoreFailed)
+			return nil, entities.NewError(entities.ErrCodeTagDisableNotAllowed)
 		}
 
 		existingEngine.LastUpdateTime = time.Now().Unix()
