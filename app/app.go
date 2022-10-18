@@ -40,7 +40,7 @@ func (app *appServer) init() {
 
 func (app *appServer) Run() {
 
-	if config.EnvironmentMode == config.ProductionMode {
+	if config.IsProduction() {
 		gin.SetMode(gin.ReleaseMode)
 	}
 

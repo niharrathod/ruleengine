@@ -11,7 +11,7 @@ var Logger *zap.Logger
 func Initialize() {
 	var loggerConfig zap.Config
 
-	if config.EnvironmentMode == config.ProductionMode {
+	if config.IsProduction() {
 		loggerConfig = zap.NewProductionConfig()
 
 	} else {
