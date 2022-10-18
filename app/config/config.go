@@ -10,12 +10,11 @@ import (
 )
 
 const (
-	// define application mode as an environment variable
-	ENV_MODE = "ENVIRONMENT_MODE"
-
-	DevelopmentMode = "dev"
-	ProductionMode  = "prod"
+	developmentEnv = "dev"
+	productionEnv  = "prod"
 )
+
+var environment string
 
 type HttpConf struct {
 	BindIp      string `yaml:"bindIp"`
@@ -50,7 +49,6 @@ var Server *ServerConf
 var Datastore *DatastoreConf
 
 // application mode either 'release' or 'dev'
-var EnvironmentMode string = DevelopmentMode
 
 var defaultConfig = &AppConf{
 	Server: &ServerConf{
@@ -63,10 +61,20 @@ var defaultConfig = &AppConf{
 }
 
 func init() {
-	EnvironmentMode = os.Getenv(ENV_MODE)
-	if len(EnvironmentMode) == 0 {
-		EnvironmentMode = DevelopmentMode
+	env := os.Getenv("ENVIRONMENT")
+	switch env {
+	case developmentEnv:
+		environment = developmentEnv
+		return
+	case productionEnv:
+		environment = productionEnv
+		return
 	}
+	environment = developmentEnv
+}
+
+func IsProduction() bool {
+	return environment == productionEnv
 }
 
 func Initialize() {
