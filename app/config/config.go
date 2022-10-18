@@ -14,6 +14,7 @@ const (
 	productionEnv  = "prod"
 )
 
+// either 'prod' or 'dev'
 var environment string
 
 type HttpConf struct {
@@ -48,18 +49,6 @@ type Config struct {
 var Server *ServerConf
 var Datastore *DatastoreConf
 
-// application mode either 'release' or 'dev'
-
-var defaultConfig = &AppConf{
-	Server: &ServerConf{
-		Http: &HttpConf{
-			BindIp:      "127.0.0.1",
-			BindPort:    80,
-			ContextPath: "",
-		},
-	},
-}
-
 func init() {
 	env := os.Getenv("ENVIRONMENT")
 	switch env {
@@ -78,7 +67,6 @@ func IsProduction() bool {
 }
 
 func Initialize() {
-
 	ymlPath := flag.String("config", "config.yml", "yaml based configuration path")
 	flag.Parse()
 
@@ -86,42 +74,19 @@ func Initialize() {
 
 	// check if file exist
 	if _, err := os.Stat(*ymlPath); errors.Is(err, os.ErrNotExist) {
-		log.Println("config file don't exist. default config is applied")
-		Server = defaultConfig.Server
-		return
+		log.Fatalln("config file don't exist.")
 	}
 
 	ymlConfig, err := os.ReadFile(*ymlPath)
 	if err != nil {
-		log.Fatalf("Could not read config file. error: %v", err)
+		log.Fatalf("Could not read config file. error: %v\n", err)
 	}
 
 	err = yaml.Unmarshal(ymlConfig, &conf)
 	if err != nil {
-		log.Fatalf("Could not unmarshal config file. error: %v", err)
+		log.Fatalf("Could not unmarshal config file. error: %v\n", err)
 	}
 
-	prepareFinalConfig(conf.App)
 	Server = conf.App.Server
 	Datastore = conf.App.Datastore
-}
-
-func prepareFinalConfig(appConfig *AppConf) {
-
-	if appConfig.Server == nil {
-		appConfig.Server = defaultConfig.Server
-		return
-	}
-
-	if len(appConfig.Server.Http.BindIp) == 0 {
-		appConfig.Server.Http.BindIp = defaultConfig.Server.Http.BindIp
-	}
-
-	if appConfig.Server.Http.BindPort == 0 {
-		appConfig.Server.Http.BindPort = defaultConfig.Server.Http.BindPort
-	}
-
-	if len(appConfig.Server.Http.ContextPath) == 0 {
-		appConfig.Server.Http.ContextPath = defaultConfig.Server.Http.ContextPath
-	}
 }

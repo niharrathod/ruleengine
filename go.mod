@@ -5,6 +5,7 @@ go 1.19
 require (
 	github.com/gin-contrib/zap v0.1.0
 	github.com/gin-gonic/gin v1.8.1
+	github.com/niharrathod/ruleengine-core v0.2.0
 	go.mongodb.org/mongo-driver v1.10.1
 	go.uber.org/zap v1.23.0
 	gopkg.in/yaml.v2 v2.4.0

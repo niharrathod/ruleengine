@@ -6,6 +6,7 @@ App:
       contextPath: ""
   datastore:
     mongo:
-      url: "mongodb://localhost:27017"
+      # for single node replica set directConnection=true flag needed
+      url: "mongodb://localhost:27017/?directConnection=true"
       username: "mongoadmin"
       password: "secret"
