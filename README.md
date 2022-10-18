@@ -20,11 +20,11 @@ ruleengine is a web interface over [ruleengine-core](https://github.com/niharrat
 - [X] docker image build
 - [X] mongodb client setup
 - [ ] request tracing
-- Control plane API
-- [ ] RuleEngine CRD API
-- [ ] RuleEngine Update (Default/Enable/Disable) API
-- [ ] RuleEngine versioning
-- Data plane API
+**Control plane API**
+- [X] RuleEngine CRD API
+- [X] RuleEngine Update (Default/Enable/Disable) API
+- [X] RuleEngine versioning
+**Data plane API**
 - [ ] RuleEngine evaluate
 
 #### Commands
