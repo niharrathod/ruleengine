@@ -6,12 +6,11 @@
 
 ## Overview
 
-ruleengine is a web interface over [ruleengine-core](https://github.com/niharrathod/ruleengine-core). It provides management layer for RuleEngine, which include following operations :
+ruleengine is a web interface over [ruleengine-core](https://github.com/niharrathod/ruleengine-core) for control plane and data plane operations, which include following :
 
-- CRD RuleEngine APIs
-- Enable/Disable RuleEngine
+- CRUD RuleEngine (Control plane) APIs
 - RuleEngine versioning
-- RuleEngine evaluate API
+- RuleEngine evaluate (Data plane) API
 
 ### Todo
 
@@ -21,9 +20,12 @@ ruleengine is a web interface over [ruleengine-core](https://github.com/niharrat
 - [X] docker image build
 - [X] mongodb client setup
 - [ ] request tracing
+- Control plane API
 - [ ] RuleEngine CRD API
-- [ ] RuleEngine Enable/Disable API
+- [ ] RuleEngine Update (Default/Enable/Disable) API
 - [ ] RuleEngine versioning
+- Data plane API
+- [ ] RuleEngine evaluate
 
 #### Commands
 
