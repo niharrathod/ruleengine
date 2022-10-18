@@ -31,10 +31,11 @@ func New() *appServer {
 	return &appServer
 }
 
+// initialization activities
+// Incase of init activity failure, log the error and exit (os.Exist(1))
 func (app *appServer) init() {
 	config.Initialize()
 	log.Initialize()
-	// add initiation activities here
 	datastore.Initialize()
 }
 
@@ -75,23 +76,32 @@ func (app *appServer) prepAndWaitForShutDown() {
 	signal.Notify(quitSignal, syscall.SIGINT, syscall.SIGTERM)
 	<-quitSignal
 
-	log.Logger.Info("Application is shutting down")
+	app.shutdown()
+}
 
+/*
+To tear down the app. Order of tear down activities is important
+
+ 1. http listener - to stop incoming traffic
+ 2. close datastore connection
+    # Add more activities here
+    log sync should be last activity
+*/
+func (app *appServer) shutdown() {
 	shutdownContext, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	app.shutdown(shutdownContext)
-}
+	log.Logger.Info("Application is shutting down")
 
-func (app *appServer) shutdown(ctx context.Context) {
-
-	// add context aware shutdown activities here
-	datastore.Close(ctx)
-
-	if err := app.httpserver.Shutdown(ctx); err != nil {
+	// stop http listener
+	if err := app.httpserver.Shutdown(shutdownContext); err != nil {
 		log.Logger.Error("Server Shutdown failed:", zap.String("error", err.Error()))
 	}
 
+	// close datastore connection
+	datastore.Close(shutdownContext)
+
+	// sync logs
 	err := log.Logger.Sync()
 	if err != nil {
 		// logger sync failed, so back to basics :(
