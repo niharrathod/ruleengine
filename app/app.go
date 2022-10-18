@@ -13,6 +13,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/niharrathod/ruleengine/app/config"
+	"github.com/niharrathod/ruleengine/app/controlplane"
 	"github.com/niharrathod/ruleengine/app/ext/datastore"
 	"github.com/niharrathod/ruleengine/app/handler"
 	"github.com/niharrathod/ruleengine/app/log"
@@ -52,8 +53,15 @@ func (app *appServer) Run() {
 	rest := router.Group("health")
 	rest.GET("/check/", handler.HealthCheck())
 
-	// add rest api and handler mapping here
-
+	reApi := router.Group("/api")
+	reApi.GET("/ruleengines/:ruleengine/", controlplane.GetRuleEngine())
+	reApi.POST("/ruleengines/:ruleengine/tags/:tag", controlplane.CreateRuleEngine())
+	reApi.DELETE("/ruleengines/:ruleengine", controlplane.DeleteRuleEngine())
+	reApi.DELETE("/ruleengines/:ruleengine/tags/:tag", controlplane.DeleteRuleEngineConfig())
+	reApi.PATCH("/ruleengines/:ruleengine/tags/:tag/setdefault", controlplane.SetDefaultTag())
+	reApi.PATCH("/ruleengines/:ruleengine/removedefault", controlplane.RemoveDefaultTag())
+	reApi.PATCH("/ruleengines/:ruleengine/tags/:tag/enable", controlplane.EnableRuleEngine())
+	reApi.PATCH("/ruleengines/:ruleengine/tags/:tag/disable", controlplane.DisableRuleEngine())
 	app.httpserver = &http.Server{
 		Addr:    config.Server.Http.BindIp + ":" + strconv.Itoa(config.Server.Http.BindPort),
 		Handler: router,
